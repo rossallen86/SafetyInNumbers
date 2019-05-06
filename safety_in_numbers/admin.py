@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import SafteyInUser
+from .models import SafetyInUser
 
 
 class SafetyInUserAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(SafteyInUser, SafetyInUserAdmin)
+admin.site.register(SafetyInUser, SafetyInUserAdmin)

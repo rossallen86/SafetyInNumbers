@@ -65,8 +65,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_USERNAME_REQUIRED = False
 
 
-
-AUTH_USER_MODEL = 'safety_in_numbers.SafteyInUser'
+AUTH_USER_MODEL = 'safety_in_numbers.SafetyInUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

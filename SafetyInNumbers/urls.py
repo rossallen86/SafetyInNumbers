@@ -21,6 +21,6 @@ from safety_in_numbers.views import Index, Profile
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^accounts/', include('allauth.urls')),
-    url('^accounts/profile', Profile.as_view(), name='Profile'),
+    url('^accounts/profile/', Profile.as_view(), name='Profile'),
     path('', Index.as_view(), name='Index')
 ]

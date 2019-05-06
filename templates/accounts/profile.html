@@ -1,4 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>User Profile</h1>
+    <br/>
+     <form method="POST">
+        {% csrf_token %}
+    {%  for f in form %}
+         {{ f.label_tag }}
+            {{ f }}
+        <br/>
+    {%  endfor %}
+     <button type="submit">Submit</button>
+     </form>
 {% endblock content %}
