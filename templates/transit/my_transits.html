@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>My Transits</h1>
+    <table class="table table-bordered">
+        <thead class="table thead-dark">
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">comments</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for t in my_transits %}
+            <tr class="table table-hover">
+                <td>{{ t.date }}</td>
+                <td>{{ t.time }}</td>
+                <td>{{ t.starting_address }}</td>
+                <td>{{ t.ending_address }}</td>
+                <td>{{ t.comments }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

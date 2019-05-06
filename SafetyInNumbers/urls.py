@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
-from safety_in_numbers.views import Index, Profile
+from safety_in_numbers.views import Index, Profile, CreateTransit, MyTransits
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', Index.as_view(), name='Index'),
     url(r'^accounts/', include('allauth.urls')),
     url('^accounts/profile/', Profile.as_view(), name='Profile'),
-    path('', Index.as_view(), name='Index')
+    url(r'^transit/create_transit/', CreateTransit.as_view(), name='Create_Transit'),
+    url(r'^transit/my_transits/', MyTransits.as_view(), name='My_Transits')
 ]
