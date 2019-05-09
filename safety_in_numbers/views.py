@@ -1,10 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic.edit import UpdateView, CreateView
 from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django.http import HttpResponse
 from safety_in_numbers.forms import SafetyInUserForm, TransitForm
 from safety_in_numbers.models import SafetyInUser, Transit
 
@@ -61,9 +62,9 @@ class CreateTransit(CreateView):
     success_url = reverse_lazy('My_Transits')
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.safety_in_user_id = self.request.user
-        self.object.save()
+        transit_obj = form.save(commit=False)
+        transit_obj.safety_in_user_id = self.request.user.id
+        transit_obj.save()
         return super(CreateTransit, self).form_valid(form)
 
 
@@ -77,3 +78,29 @@ class MyTransits(ListView):
             return Transit.objects.filter(safety_in_user=self.request.user.id)
         else:
             return None
+
+    def delete(self, part_id=None):
+        transit_obj = Transit.objects.get(id=part_id)
+        transit_obj.delete()
+        return redirect('My_Transits')
+
+
+@method_decorator(login_required, name='dispatch')
+class JoinTransits(ListView):
+    template_name = 'transit/join_transits.html'
+    context_object_name = 'transits'
+
+    def get_queryset(self):
+        try:
+            return Transit.objects.all()
+        except Transit.DoesNotExist:
+            return None
+
+    def join(self, part_id=None):
+        transit_obj = Transit.objects.get(id=part_id)
+        Transit.objects.create(date=transit_obj.date,
+                               time=transit_obj.time,
+                               starting_address=transit_obj.starting_address,
+                               ending_address=transit_obj.ending_address,
+                               comments=transit_obj.comments).save()
+        return redirect('Join_Transits')

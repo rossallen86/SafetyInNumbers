@@ -17,3 +17,5 @@ class Transit(models.Model):
     starting_address = models.CharField(max_length=50)
     ending_address = models.CharField(max_length=50)
     comments = models.CharField(max_length=140, null=True, blank=True)
+
+

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>My Transits</h1>
+    <h1>Join Transits</h1>
     <table class="table table-bordered">
         <thead class="table thead-dark">
         <tr>
@@ -9,7 +9,7 @@
             <th scope="col">From</th>
             <th scope="col">To</th>
             <th scope="col">Comments</th>
-            <th scope="col">Delete</th>
+            <th scope="col">Join</th>
         </tr>
         </thead>
         <tbody>
@@ -20,7 +20,7 @@
                         <td>{{ t.starting_address }}</td>
                         <td>{{ t.ending_address }}</td>
                         <td>{{ t.comments }}</td>
-                        <td><a href="{% url 'delete_transit' t.id %}"><i class="fa fa-trash"></i></a></td>
+                        <td><a href="{% url 'delete_transit' t.id %}"><i class="fas fa-check"></i></a></td>
                     </tr>
         {% endfor %}
         </tbody>

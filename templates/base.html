@@ -37,7 +37,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'My_Transits' %}">My Transits</a>
                     <a class="dropdown-item" href="{% url 'Create_Transit' %}">Create Transit</a>
-                    <a class="dropdown-item" href="#">Delete Transit</a>
+                    <a class="dropdown-item" href="{% url 'Join_Transits' %}">Join Transits</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -47,7 +47,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'Profile' %}">Profile</a>
-                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="{% url 'account_change_password' %}">Change Password</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>

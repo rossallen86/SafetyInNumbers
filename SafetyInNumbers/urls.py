@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
-from safety_in_numbers.views import Index, Profile, CreateTransit, MyTransits
+from safety_in_numbers.views import Index, Profile, CreateTransit, MyTransits, JoinTransits
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,5 +24,8 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     url('^accounts/profile/', Profile.as_view(), name='Profile'),
     url(r'^transit/create_transit/', CreateTransit.as_view(), name='Create_Transit'),
-    url(r'^transit/my_transits/', MyTransits.as_view(), name='My_Transits')
+    url(r'^transit/my_transits/', MyTransits.as_view(), name='My_Transits'),
+    url(r'^delete/(?P<part_id>[0-9]+)/$', MyTransits.delete, name='delete_transit'),
+    url(r'^transit/join_transits/', JoinTransits.as_view(), name='Join_Transits'),
+    url(r'^join/(?P<part_id>[0-9]+)/$', JoinTransits.join, name='join_transit'),
 ]

@@ -16,8 +16,8 @@ class SafetyInUserForm(forms.ModelForm):
 
 
 class TransitForm(forms.ModelForm):
-    date = forms.DateField()
-    time = forms.TimeField()
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
     starting_address = forms.CharField(max_length=50)
     ending_address = forms.CharField(max_length=50)
     comments = forms.CharField(max_length=140)

@@ -1,14 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Create Transit</h1>
-     <br/>
-     <form method="POST">
+    <h1>Create Transit</h1>
+    <br/>
+    <form method="POST">
         {% csrf_token %}
-    {%  for f in form %}
-         {{ f.label_tag }}
-            {{ f }}
+        {{ form.non_field_errors }}
+        <div class="fieldWrapper">
+            {{ form.date.errors }}
+            <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
+            {{ form.date }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.time.errors }}
+            <label for="{{ form.time.id_for_label }}">{{ form.time.label }}</label>
+            {{ form.time }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.starting_address.errors }}
+            <label for="{{ form.starting_address.id_for_label }}">{{ form.starting_address.label }}</label>
+            {{ form.starting_address }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.ending_address.errors }}
+            <label for="{{ form.ending_address.id_for_label }}">{{ form.ending_address.label }}</label>
+            {{ form.ending_address }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.comments.errors }}
+            <label for="{{ form.comments.id_for_label }}">{{ form.comments.label }}</label>
+            {{ form.comments }}
+        </div>
         <br/>
-    {%  endfor %}
-     <button type="submit">Submit</button>
-     </form>
+        <button class="btn btn-warning" type="submit">Submit</button>
+    </form>
 {% endblock content %}
