@@ -13,14 +13,14 @@
         </tr>
         </thead>
         <tbody>
-        {% for t in my_transits %}
+        {% for t in transits %}
                     <tr class="table table-hover">
                         <td>{{ t.date }}</td>
                         <td>{{ t.time }}</td>
                         <td>{{ t.starting_address }}</td>
                         <td>{{ t.ending_address }}</td>
                         <td>{{ t.comments }}</td>
-                        <td><a href="{% url 'delete_transit' t.id %}"><i class="fas fa-check"></i></a></td>
+                        <td><a href="{% url 'join_transit' t.id %}"><i class="fas fa-check"></i></a></td>
                     </tr>
         {% endfor %}
         </tbody>

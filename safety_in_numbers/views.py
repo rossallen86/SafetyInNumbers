@@ -5,9 +5,8 @@ from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.http import HttpResponse
 from safety_in_numbers.forms import SafetyInUserForm, TransitForm
-from safety_in_numbers.models import SafetyInUser, Transit
+from safety_in_numbers.models import SafetyInUser, Transit, JoinedTransit
 
 
 @method_decorator(login_required, name='dispatch')
@@ -63,8 +62,11 @@ class CreateTransit(CreateView):
 
     def form_valid(self, form):
         transit_obj = form.save(commit=False)
-        transit_obj.safety_in_user_id = self.request.user.id
         transit_obj.save()
+        me = SafetyInUser.objects.get(id=self.request.user.id)
+        trans = Transit.objects.get(id=transit_obj.id)
+        JoinedTransit.objects.create(safety_in_user=me,
+                                     transit=trans)
         return super(CreateTransit, self).form_valid(form)
 
 
@@ -74,13 +76,17 @@ class MyTransits(ListView):
     context_object_name = 'my_transits'
 
     def get_queryset(self):
-        if Transit.objects.filter(safety_in_user=self.request.user.id).exists():
-            return Transit.objects.filter(safety_in_user=self.request.user.id)
+        if JoinedTransit.objects.filter(safety_in_user=self.request.user.id).exists():
+            my_joined_trans = JoinedTransit.objects.filter(safety_in_user=self.request.user.id)
+            joined_trans_ids = []
+            for t in my_joined_trans:
+                joined_trans_ids.append(t.transit_id)
+            return Transit.objects.filter(id__in=joined_trans_ids)
         else:
             return None
 
-    def delete(self, part_id=None):
-        transit_obj = Transit.objects.get(id=part_id)
+    def delete(self, transit_id=None):
+        transit_obj = Transit.objects.get(id=transit_id)
         transit_obj.delete()
         return redirect('My_Transits')
 
@@ -92,15 +98,18 @@ class JoinTransits(ListView):
 
     def get_queryset(self):
         try:
-            return Transit.objects.all()
-        except Transit.DoesNotExist:
+            other_joined_trans = JoinedTransit.objects.exclude(safety_in_user=self.request.user.id)
+            print(other_joined_trans)
+            joined_trans_ids = []
+            for t in other_joined_trans:
+                joined_trans_ids.append(t.transit_id)
+            print(joined_trans_ids)
+            return Transit.objects.filter(id__in=joined_trans_ids)
+        except JoinedTransit.DoesNotExist:
             return None
 
-    def join(self, part_id=None):
-        transit_obj = Transit.objects.get(id=part_id)
-        Transit.objects.create(date=transit_obj.date,
-                               time=transit_obj.time,
-                               starting_address=transit_obj.starting_address,
-                               ending_address=transit_obj.ending_address,
-                               comments=transit_obj.comments).save()
+    def join(self, transit_id=None):
+        me = SafetyInUser.objects.get(id=self.user.id)
+        transit_obj = Transit.objects.get(id=transit_id)
+        JoinedTransit.objects.create(safety_in_user=me, transit=transit_obj)
         return redirect('Join_Transits')

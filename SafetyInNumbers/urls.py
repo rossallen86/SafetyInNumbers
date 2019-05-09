@@ -25,7 +25,7 @@ urlpatterns = [
     url('^accounts/profile/', Profile.as_view(), name='Profile'),
     url(r'^transit/create_transit/', CreateTransit.as_view(), name='Create_Transit'),
     url(r'^transit/my_transits/', MyTransits.as_view(), name='My_Transits'),
-    url(r'^delete/(?P<part_id>[0-9]+)/$', MyTransits.delete, name='delete_transit'),
+    url(r'^delete/(?P<transit_id>[0-9]+)/$', MyTransits.delete, name='delete_transit'),
     url(r'^transit/join_transits/', JoinTransits.as_view(), name='Join_Transits'),
-    url(r'^join/(?P<part_id>[0-9]+)/$', JoinTransits.join, name='join_transit'),
+    url(r'^join/(?P<transit_id>[0-9]+)/$', JoinTransits.join, name='join_transit'),
 ]
