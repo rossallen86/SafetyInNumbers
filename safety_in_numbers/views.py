@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.views.generic.edit import UpdateView, CreateView
+from django.views.generic.edit import UpdateView, CreateView, FormView
 from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from safety_in_numbers.forms import SafetyInUserForm, TransitForm
+from django.core.mail import send_mail
+from django.conf import settings
+from safety_in_numbers.forms import SafetyInUserForm, TransitForm, EmailForm
 from safety_in_numbers.models import SafetyInUser, Transit, JoinedTransit
 
 
@@ -13,17 +15,17 @@ from safety_in_numbers.models import SafetyInUser, Transit, JoinedTransit
 class Index(View):
 
     def get(self, request):
-        return render(request, "index.html")
+        return redirect('My_Transits')
 
     def post(self, request):
-        pass
+        return redirect('My_Transits')
 
 
 @method_decorator(login_required, name='dispatch')
 class Profile(UpdateView):
     template_name = 'accounts/profile.html'
     form_class = SafetyInUserForm
-    success_url = reverse_lazy('Index')
+    success_url = reverse_lazy('My_Transits')
 
     def get_queryset(self):
         return SafetyInUser.objects.filter(id=self.request.user.id)
@@ -113,3 +115,45 @@ class JoinTransits(ListView):
         transit_obj = Transit.objects.get(id=transit_id)
         JoinedTransit.objects.create(safety_in_user=me, transit=transit_obj)
         return redirect('Join_Transits')
+
+
+@method_decorator(login_required, name='dispatch')
+class Volunteers(ListView):
+    template_name = 'volunteers/volunteers.html'
+    context_object_name = 'volunteers'
+
+    def get_queryset(self):
+        try:
+            volunteers = SafetyInUser.objects.filter(is_volunteer=True)
+            try:
+                volunteers.exclude(id=self.request.user.id)
+            finally:
+                return volunteers
+        except SafetyInUser.DoesNotExist:
+            return None
+
+
+@method_decorator(login_required, name='dispatch')
+class ContactVolunteer(FormView):
+    template_name = 'volunteers/contact_volunteer.html'
+    form_class = EmailForm
+
+    def get_context_data(self, **kwargs):
+        volunteer_id = self.kwargs['volunteer_id']
+        context = super(ContactVolunteer, self).get_context_data(**kwargs)
+        volunteer_email = SafetyInUser.objects.get(id=volunteer_id).email
+        context['form'] = self.form_class(initial={'from_email': self.request.user,
+                                                   'to_email': volunteer_email})
+        return context
+
+    def form_valid(self, form):
+        try:
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['body']
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [form.cleaned_data['to_email']]
+            send_mail(subject, message, email_from, recipient_list)
+            return redirect('My_Transits')
+        finally:
+            print('failed to send email')
+            return redirect('volunteers')

@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
-from safety_in_numbers.views import Index, Profile, CreateTransit, MyTransits, JoinTransits
+from safety_in_numbers.views import Index, Profile, CreateTransit, MyTransits, JoinTransits, Volunteers, ContactVolunteer
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'^delete/(?P<transit_id>[0-9]+)/$', MyTransits.delete, name='delete_transit'),
     url(r'^transit/join_transits/', JoinTransits.as_view(), name='Join_Transits'),
     url(r'^join/(?P<transit_id>[0-9]+)/$', JoinTransits.join, name='join_transit'),
+    url(r'^volunteers/', Volunteers.as_view(), name='volunteers'),
+    url(r'^contact/(?P<volunteer_id>[0-9]+)/$', ContactVolunteer.as_view(), name='contact_volunteer'),
 ]

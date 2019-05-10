@@ -1,14 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
+    <br/>
     <h1>User Profile</h1>
     <br/>
-     <form method="POST">
+    <form method="POST">
         {% csrf_token %}
-    {%  for f in form %}
-         {{ f.label_tag }}
-            {{ f }}
-        <br/>
-    {%  endfor %}
-     <button type="submit">Submit</button>
-     </form>
+        {% for f in form %}
+            <div class="form-row">
+                <div class="col">
+                    {{ f.label }}
+                </div>
+                <div class="col">
+                    {{ f }}
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+
+                </div>
+            </div>
+            <br/>
+        {% endfor %}
+        <button class="btn btn-warning" type="submit">Submit</button>
+    </form>
 {% endblock content %}
